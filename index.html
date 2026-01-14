@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -113,7 +113,7 @@
       background: var(--surface);
       flex-shrink: 0;
     }
-    .brand .title { font-weight: 700; letter-spacing: 0.2px; color: var(--text); font-size: var(--fs-16); }
+    .brand .title { font-weight: 700; letter-spacing: 0.2px; color: var(--text); font-size: var(--fs-16); white-space: nowrap; }
     .brand .subtitle { font-size: var(--fs-12); color: var(--muted); margin-top: -4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* Menú desktop visible */
@@ -446,8 +446,11 @@
     @media (max-width: 640px) {
       .grid { grid-template-columns: 1fr; }
       .gallery { grid-template-columns: 1fr; }
-      .nav { grid-template-columns: auto auto auto; }
-      .brand .subtitle { display: none; }
+      .nav { grid-template-columns: 1fr; justify-items: center; }
+      .brand { width: 100%; justify-content: center; }
+      .brand img { width: 50px; height: 50px; }
+      .brand .title { font-size: var(--fs-18); }
+      .brand .subtitle { display: block; font-size: var(--fs-13); }
       .reserve-inline { grid-template-columns: 1fr; }
       .actions .btn { padding: 8px 12px; }
       .hero { padding: 28px 0 18px; }
@@ -679,7 +682,7 @@
   <footer>
     <div class="container footer-grid">
       <div>
-        <div class="brand">
+        <div class="brand" style="justify-content:flex-start;">
           <img src="logo.png" alt="Logo Dominican Excursion" />
           <div>
             <div class="title">Dominican Excursion</div>
@@ -1276,14 +1279,11 @@
     });
 
     // Ajustes de robustez para móviles (Samsung A12)
-    // Evitar zoom accidental en inputs y asegurar scroll en modales
     document.addEventListener("touchmove", () => {}, { passive: true });
-    // Asegurar que los modales se reposicionen si el teclado móvil aparece
     window.addEventListener("resize", () => {
       const isModalOpen = modalBackdrop.style.display === "flex";
       const isDetailsOpen = detailsBackdrop.style.display === "flex";
       if (isModalOpen || isDetailsOpen) {
-        // Forzar reflow para mantener centrado
         document.body.style.overflow = "hidden";
       }
     });
