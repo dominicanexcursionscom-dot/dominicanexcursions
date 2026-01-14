@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dominican Excursion — Turismo y Reservas</title>
+  <meta name="description" content="Explora tours y excursiones en República Dominicana. Reserva fácil, experiencia premium y atención personalizada." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    /* =========================
+       Variables de tema
+       ========================= */
+    :root {
+      /* Tema claro — alto contraste y legibilidad */
+      --bg: #ffffff;
+      --bg-soft: #f7fafc;
+      --surface: #ffffff;
+      --surface-strong: #f1f5f9;
+      --text: #0f172a;
+      --text-soft: #334155;
+      --muted: #475569;
+      --primary: #0ea5e9;
+      --accent: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border: #d7dee7;
+      --shadow: 0 10px 30px rgba(2, 8, 23, 0.08);
+
+      --font-sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      --font-serif: "Playfair Display", Georgia, serif;
+      --radius-xs: 10px;
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+
+      --ease: cubic-bezier(.22,.61,.36,1);
+      --ease-soft: cubic-bezier(.25,.8,.25,1);
+      --duration: 280ms;
+    }
+
+    :root[data-theme="dark"] {
+      /* Tema oscuro — alto contraste y legibilidad */
+      --bg: #0b0f14;
+      --bg-soft: #0e1319;
+      --surface: #141a22;
+      --surface-strong: #1a212b;
+      --text: #f5f7fa;
+      --text-soft: #d7dde6;
+      --muted: #a9b3c2;
+      --primary: #22d3ee;
+      --accent: #60a5fa;
+      --border: #2a3442;
+      --shadow: 0 12px 36px rgba(0,0,0,0.45);
+    }
+
+    /* =========================
+       Reset y base
+       ========================= */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(96,165,250,0.12), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, rgba(34,211,238,0.12), transparent 60%),
+        var(--bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container { width: min(1200px, 92vw); margin: 0 auto; }
+
+    /* =========================
+       Header y navegación
+       ========================= */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: saturate(1.2) blur(8px);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .nav {
+      display: grid; grid-template-columns: auto 1fr auto;
+      align-items: center; gap: 16px; padding: 12px 0;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand img {
+      width: 42px; height: 42px; border-radius: 12px;
+      box-shadow: var(--shadow); border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .brand .title { font-weight: 700; letter-spacing: 0.2px; color: var(--text); }
+    .brand .subtitle { font-size: 12px; color: var(--muted); margin-top: -4px; }
+
+    /* Menú desktop visible */
+    .menu { display: flex; gap: 18px; justify-content: center; align-items: center; }
+    .menu a {
+      padding: 10px 14px; border-radius: 10px; color: var(--text);
+      transition: background var(--duration) var(--ease), transform var(--duration) var(--ease);
+    }
+    .menu a:hover {
+      background: color-mix(in oklab, var(--surface-strong) 80%, var(--primary) 8%);
+      transform: translateY(-1px);
+    }
+
+    .actions { display: flex; gap: 10px; align-items: center; }
+
+    /* Botón menú móvil (hamburger) */
+    .hamburger {
+      display: none; /* visible solo en móvil */
+      align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 10px;
+      border: 1px solid var(--border); background: var(--surface-strong);
+      color: var(--text); cursor: pointer;
+      transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease);
+    }
+    .hamburger:hover { background: color-mix(in oklab, var(--surface-strong) 80%, var(--primary) 8%); }
+
+    /* Menú móvil desplegable */
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 8px; padding: 10px 0;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      animation: slideDown var(--duration) var(--ease);
+    }
+    .mobile-menu a {
+      padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--surface-strong); color: var(--text);
+      transition: background var(--duration) var(--ease);
+    }
+    .mobile-menu a:hover { background: color-mix(in oklab, var(--surface-strong) 80%, var(--primary) 8%); }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =========================
+       Botones
+       ========================= */
+    .btn {
+      position: relative; display: inline-flex; align-items: center; gap: 10px;
+      padding: 10px 16px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border); color: var(--text);
+      background: var(--surface-strong); box-shadow: var(--shadow);
+      transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), background var(--duration) var(--ease), border-color var(--duration) var(--ease), color var(--duration) var(--ease);
+      cursor: pointer; user-select: none;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(0,0,0,0.12); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary {
+      border-color: color-mix(in oklab, var(--primary) 50%, var(--border));
+      background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 22%, #ffffff), color-mix(in oklab, var(--primary) 10%, #ffffff));
+      color: #0b1b24;
+    }
+    :root[data-theme="dark"] .btn-primary {
+      color: #ffffff;
+      background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 30%, var(--surface-strong)), color-mix(in oklab, var(--primary) 15%, var(--surface-strong)));
+      text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+    }
+    .btn-outline { background: transparent; border-color: var(--border); color: var(--text); }
+
+    .theme-toggle {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--surface-strong);
+      color: var(--text); cursor: pointer;
+      transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease), color var(--duration) var(--ease);
+    }
+    .theme-toggle:hover { background: color-mix(in oklab, var(--surface-strong) 80%, var(--primary) 8%); color: var(--text); }
+
+    /* =========================
+       Hero
+       ========================= */
+    .hero { position: relative; padding: 64px 0 40px; overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items: center; }
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.05; margin: 0 0 12px; letter-spacing: -0.5px;
+      color: var(--text);
+    }
+    .hero p { color: var(--text-soft); font-size: clamp(16px, 2.2vw, 18px); margin: 0 0 22px; }
+    .hero .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--surface-strong);
+      color: var(--text-soft); font-size: 13px; margin-bottom: 14px;
+    }
+    .hero-media {
+      position: relative; border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid var(--border); box-shadow: var(--shadow); transform: translateZ(0);
+    }
+    .hero-media img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 1200ms var(--ease); }
+    .hero-media:hover img { transform: scale(1.06); }
+    .hero-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(600px 300px at 80% 20%, rgba(34,211,238,0.18), transparent 60%),
+                  radial-gradient(500px 260px at 20% 80%, rgba(96,165,250,0.16), transparent 60%);
+      mix-blend-mode: screen; opacity: 0.7; pointer-events: none;
+    }
+
+    /* =========================
+       Secciones
+       ========================= */
+    section { padding: 40px 0; }
+    .section-head {
+      display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 18px;
+    }
+    .section-head h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(24px, 3.6vw, 34px);
+      margin: 0; color: var(--text);
+    }
+    .section-head p { color: var(--muted); margin: 0; }
+
+    /* =========================
+       Cards
+       ========================= */
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; } .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+
+    .card {
+      position: relative; border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--surface-strong);
+      overflow: hidden; box-shadow: var(--shadow);
+      transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), border-color var(--duration) var(--ease), background var(--duration) var(--ease);
+    }
+    :root[data-theme="light"] .card { background: #ffffff; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 18px 50px rgba(0,0,0,0.12); border-color: color-mix(in oklab, var(--primary) 40%, var(--border)); }
+    .card-media { aspect-ratio: 16/10; overflow: hidden; background: #0b0f14; }
+    :root[data-theme="light"] .card-media { background: #e2e8f0; }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 900ms var(--ease); }
+    .card:hover .card-media img { transform: scale(1.08); }
+    .card-body { padding: 14px 14px 16px; }
+    .card-title { font-weight: 700; margin: 0 0 6px; color: var(--text); }
+    .card-meta {
+      display: flex; gap: 10px; align-items: center;
+      color: var(--text); font-size: 13px; margin-bottom: 10px; flex-wrap: wrap;
+    }
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 10px; border-radius: 999px;
+      border: 1px solid var(--border);
+      background: color-mix(in oklab, var(--surface-strong) 90%, var(--primary) 10%);
+      color: var(--text);
+      font-size: 12px;
+    }
+    :root[data-theme="light"] .chip { background: color-mix(in oklab, #ffffff 90%, var(--primary) 10%); }
+    .price {
+      font-weight: 700; color: #0b1b24;
+      background: var(--primary);
+      padding: 6px 10px; border-radius: 8px;
+      border: 1px solid color-mix(in oklab, var(--primary) 60%, var(--border));
+    }
+    :root[data-theme="dark"] .price { color: #0b0f14; }
+
+    .card-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+
+    /* =========================
+       Galería
+       ========================= */
+    .gallery { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+    .gallery .tile {
+      position: relative; border-radius: var(--radius-md);
+      overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow);
+      background: #0b0f14;
+    }
+    :root[data-theme="light"] .gallery .tile { background: #e2e8f0; }
+    .gallery .tile img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 900ms var(--ease); }
+    .gallery .tile:hover img { transform: scale(1.08); }
+
+    /* =========================
+       Reserva rápida (inline)
+       ========================= */
+    .reserve-inline {
+      display: grid; grid-template-columns: 1.2fr 1fr 1fr auto auto; gap: 10px;
+      background: var(--surface-strong); border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 12px; box-shadow: var(--shadow);
+    }
+    :root[data-theme="light"] .reserve-inline { background: #ffffff; }
+    .reserve-inline .label { font-weight: 600; color: var(--text); font-size: 14px; }
+    .reserve-inline .value { font-weight: 700; color: var(--primary); font-size: 16px; }
+
+    /* =========================
+       Modal reserva
+       ========================= */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 100; animation: fadeIn var(--duration) var(--ease);
+      padding: 16px; /* margen para móviles */
+    }
+    .modal {
+      width: min(720px, 92vw);
+      max-height: min(88vh, 100vh); /* límite de altura */
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden; /* contenedor */
+      color: var(--text);
+      display: grid; grid-template-rows: auto 1fr auto; /* head, body scroll, foot */
+    }
+    .modal-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+    }
+    .modal-body {
+      padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+      overflow-y: auto; /* scroll interno para móviles */
+    }
+    @media (max-width: 720px) { .modal-body { grid-template-columns: 1fr; } }
+    .form-field { display: grid; gap: 8px; }
+    .form-field label { font-weight: 600; color: var(--text); }
+    .input, select, textarea {
+      padding: 10px 12px; border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #ffffff; color: #0f172a;
+      outline: none;
+      transition: border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease), background var(--duration) var(--ease), color var(--duration) var(--ease);
+    }
+    :root[data-theme="dark"] .input, :root[data-theme="dark"] select, :root[data-theme="dark"] textarea {
+      background: #1a212b; color: #f5f7fa;
+    }
+    .input::placeholder, textarea::placeholder { color: #64748b; }
+    :root[data-theme="dark"] .input::placeholder, :root[data-theme="dark"] textarea::placeholder { color: #b9c3d1; }
+    .input:focus, select:focus, textarea:focus {
+      border-color: color-mix(in oklab, var(--primary) 55%, var(--border));
+      box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 22%, transparent);
+      background: #ffffff; color: #0f172a;
+    }
+    :root[data-theme="dark"] .input:focus, :root[data-theme="dark"] select:focus, :root[data-theme="dark"] textarea:focus {
+      background: #0d1218; color: #f5f7fa;
+    }
+    .modal-foot {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      padding: 14px 16px; border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .total-line {
+      display: flex; flex-direction: column; gap: 6px;
+      color: var(--text);
+    }
+    .total-line .total { font-size: 18px; font-weight: 700; color: var(--primary); }
+    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+
+    /* =========================
+       Modal detalles
+       ========================= */
+    .details-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 90; animation: fadeIn var(--duration) var(--ease);
+      padding: 16px;
+    }
+    .details-modal {
+      width: min(800px, 94vw);
+      max-height: min(90vh, 100vh);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      color: var(--text);
+      display: grid; grid-template-rows: auto 1fr auto;
+    }
+    .details-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+    }
+    .details-body {
+      padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+      overflow-y: auto;
+    }
+    @media (max-width: 720px) { .details-body { grid-template-columns: 1fr; } }
+    .details-foot {
+      display: flex; justify-content: flex-end; gap: 10px;
+      padding: 14px 16px; border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    /* =========================
+       Footer
+       ========================= */
+    footer { margin-top: 20px; border-top: 1px solid var(--border); background: var(--bg-soft); }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 18px; padding: 24px 0;
+    }
+    @media (max-width: 980px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-grid h4 { margin: 0 0 10px; color: var(--text); }
+    .footer-grid a { color: var(--text-soft); }
+    .legal {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      padding: 12px 0 24px; color: var(--muted); font-size: 13px;
+    }
+
+    /* =========================
+       Responsive
+       ========================= */
+    @media (max-width: 980px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .menu { display: none; } /* ocultar menú desktop */
+      .hamburger { display: inline-flex; } /* mostrar botón hamburger */
+      .gallery { grid-template-columns: 1fr 1fr; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      .gallery { grid-template-columns: 1fr; }
+      .nav { grid-template-columns: auto auto auto; }
+      .brand .subtitle { display: none; }
+      .reserve-inline { grid-template-columns: 1fr; }
+      .actions .btn { padding: 8px 12px; }
+      .hero { padding: 32px 0 20px; }
+      .hero-media { max-height: 260px; }
+    }
+
+    /* =========================
+       Utilidades
+       ========================= */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    .kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px; border: 1px solid var(--border); border-bottom-width: 3px;
+      padding: 2px 6px; border-radius: 6px; background: var(--surface-strong); color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <!-- =========================
+       Header
+       ========================= -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Principal">
+      <div class="brand">
+        <img src="logo.png" alt="Logo Dominican Excursion" />
+        <div>
+          <div class="title">Dominican Excursion</div>
+          <div class="subtitle">Turismo y reservas premium</div>
+        </div>
+      </div>
+
+      <!-- Menú desktop visible -->
+      <nav class="menu" aria-label="Secciones">
+        <a href="#inicio">Inicio</a>
+        <a href="#tours">Tours</a>
+        <a href="#excursiones">Excursiones</a>
+        <a href="#reservas">Reservas</a>
+        <a href="#galeria">Galería</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+
+      <div class="actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+          <span id="themeIcon">☀️</span>
+          <span>Modo</span>
+          <kbd class="kbd">T</kbd>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Abrir menú">☰</button>
+        <button class="btn btn-primary" id="ctaReserva">Reservar ahora</button>
+      </div>
+    </div>
+    <!-- Menú móvil desplegable -->
+    <div class="container mobile-menu" id="mobileMenu">
+      <a href="#inicio">Inicio</a>
+      <a href="#tours">Tours</a>
+      <a href="#excursiones">Excursiones</a>
+      <a href="#reservas">Reservas</a>
+      <a href="#galeria">Galería</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </header>
+
+  <!-- =========================
+       Hero
+       ========================= -->
+  <section id="inicio" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="badge">Experiencias en República Dominicana • Atención personalizada</div>
+        <h1>Explora Punta Cana y más—tours y excursiones que se sienten épicos.</h1>
+        <p>Playas de arena blanca, aguas turquesa y aventuras inolvidables. Reserva en segundos, confirma al instante y vive una experiencia premium.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" id="heroReserva">Reservar experiencia</button>
+          <a class="btn btn-outline" href="#tours">Ver tours</a>
+        </div>
+      </div>
+      <div class="hero-media" aria-hidden="true">
+        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/24/62/1a/66/coral-costa-caribe-resort.jpg?w=900&h=500&s=1" alt="Costa caribeña" />
+        <div class="hero-glow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       Tours
+       ========================= -->
+  <section id="tours">
+    <div class="container">
+      <div class="section-head">
+        <h2>Tours destacados</h2>
+        <p>Selección curada para primera vez y repetidores exigentes.</p>
+      </div>
+
+      <div class="grid" id="toursGrid" aria-live="polite">
+        <!-- Cards generadas por JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       Excursiones
+       ========================= -->
+  <section id="excursiones">
+    <div class="container">
+      <div class="section-head">
+        <h2>Excursiones imperdibles</h2>
+        <p>Mar, selva y cultura—elige tu ritmo.</p>
+      </div>
+
+      <div class="grid" id="excursionesGrid">
+        <!-- Cards generadas por JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       Reservas
+       ========================= -->
+  <section id="reservas">
+    <div class="container">
+      <div class="section-head">
+        <h2>Reservaciones</h2>
+        <p>Selecciona un servicio, ajusta personas y extras—verás el total al instante.</p>
+      </div>
+
+      <!-- Bloque de reserva rápida con selector de servicio -->
+      <div class="reserve-inline" role="form" aria-label="Reserva rápida">
+        <div class="form-field">
+          <label class="label" for="inlineServicio">Servicio</label>
+          <select id="inlineServicio">
+            <option value="">Selecciona un servicio</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="label" for="inlinePersonas">Personas</label>
+          <select id="inlinePersonas">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="label" for="inlineExtras">Extras</label>
+          <select id="inlineExtras">
+            <option value="0">Sin extras</option>
+            <option value="15">Transporte (+$15 por persona)</option>
+            <option value="10">Bebidas premium (+$10 por persona)</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <div class="label">Total</div>
+          <div class="value" id="inlineTotal">$0 USD</div>
+        </div>
+        <div style="display:flex; align-items:end;">
+          <button class="btn btn-primary" id="inlineReservar">Reservar</button>
+        </div>
+      </div>
+
+      <div class="quote" style="margin-top:12px; border-radius: 12px; border:1px solid var(--border); background: var(--surface-strong); padding: 12px;">
+        <p style="color: var(--text-soft); margin:0 0 10px;">¿Prefieres llenar el formulario completo? Abre el modal y completa tus datos—verás el precio total según el servicio, número de personas y extras.</p>
+        <div class="card-actions">
+          <button class="btn btn-primary" id="openReserva">Abrir formulario</button>
+          <button class="btn btn-outline" id="whatsappBtn">WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       Galería
+       ========================= -->
+  <section id="galeria">
+    <div class="container">
+      <div class="section-head">
+        <h2>Galería</h2>
+        <p>Un vistazo a lo que te espera.</p>
+      </div>
+      <div class="gallery">
+        <div class="tile"><img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1600&auto=format&fit=crop" alt="Barco en el Caribe"></div>
+        <div class="tile"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Playa de arena blanca"></div>
+        <div class="tile"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop" alt="Aguas turquesa"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       Contacto
+       ========================= -->
+  <section id="contacto">
+    <div class="container">
+      <div class="section-head">
+        <h2>Contacto</h2>
+        <p>Resolvemos dudas y armamos tu itinerario ideal.</p>
+      </div>
+      <div class="grid">
+        <div class="quote" style="border-radius: 12px; border:1px solid var(--border); background: var(--surface-strong); padding: 12px;">
+          <h3 style="margin:0 0 8px; color: var(--text);">Escríbenos</h3>
+          <p style="color: var(--text-soft);">Email: reservas@dominicanexcursion.com</p>
+          <p style="color: var(--text-soft);">Tel: +1 (809) 000-0000</p>
+          <p style="color: var(--text-soft);">Horario: 8:00–20:00 AST</p>
+        </div>
+        <div class="quote" style="border-radius: 12px; border:1px solid var(--border); background: var(--surface-strong); padding: 12px;">
+          <h3 style="margin:0 0 8px; color: var(--text);">Ubicación</h3>
+          <p style="color: var(--text-soft);">Santo Domingo, República Dominicana</p>
+          <p style="color: var(--text-soft);">Operamos en Punta Cana, Bávaro y alrededores.</p>
+        </div>
+        <div class="quote" style="border-radius: 12px; border:1px solid var(--border); background: var(--surface-strong); padding: 12px;">
+          <h3 style="margin:0 0 8px; color: var(--text);">Soporte</h3>
+          <p style="color: var(--text-soft);">Políticas de cambios y cancelaciones flexibles.</p>
+          <p style="color: var(--text-soft);">Atención multicanal: email, WhatsApp y teléfono.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       Footer
+       ========================= -->
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <div class="brand">
+          <img src="logo.png" alt="Logo Dominican Excursion" />
+          <div>
+            <div class="title">Dominican Excursion</div>
+            <div class="subtitle">Turismo y reservas premium</div>
+          </div>
+        </div>
+        <p style="color:var(--muted); margin-top:10px;">Experiencias auténticas en el Caribe, con logística impecable y confirmación rápida.</p>
+      </div>
+      <div>
+        <h4>Explora</h4>
+        <a href="#tours">Tours</a><br/>
+        <a href="#excursiones">Excursiones</a><br/>
+        <a href="#galeria">Galería</a>
+      </div>
+      <div>
+        <h4>Reserva</h4>
+        <a href="#reservas">Reservaciones</a><br/>
+        <a href="#contacto">Contacto</a><br/>
+        <a href="#">Políticas</a>
+      </div>
+      <div>
+        <h4>Social</h4>
+        <a href="#">Instagram</a><br/>
+        <a href="#">Facebook</a><br/>
+        <a href="#">YouTube</a>
+      </div>
+    </div>
+    <div class="container legal">
+      <div>© 2026 Dominican Excursion. Todos los derechos reservados.</div>
+      <div>Creado por Anderson Castillo</div>
+    </div>
+  </footer>
+
+  <!-- =========================
+       Modal de reserva
+       ========================= -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <strong id="modalTitle" style="color: var(--text);">Reservar experiencia</strong>
+          <span class="chip" id="modalProductChip">Reserva general</span>
+        </div>
+        <button class="btn btn-outline" id="closeModal" aria-label="Cerrar">Cerrar</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-field">
+          <label for="servicio">Servicio</label>
+          <select id="servicio">
+            <!-- Opciones generadas por JS -->
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="nombre">Nombre completo</label>
+          <input class="input" id="nombre" type="text" placeholder="Tu nombre" autocomplete="name" />
+        </div>
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input class="input" id="email" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+        </div>
+        <div class="form-field">
+          <label for="telefono">Teléfono</label>
+          <input class="input" id="telefono" type="tel" placeholder="+1 809 ..." autocomplete="tel" />
+        </div>
+        <div class="form-field">
+          <label for="fecha">Fecha</label>
+          <input class="input" id="fecha" type="date" />
+        </div>
+        <div class="form-field">
+          <label for="personas">Personas</label>
+          <select id="personas">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="extras">Extras</label>
+          <select id="extras">
+            <option value="0">Sin extras</option>
+            <option value="15">Transporte (+$15 por persona)</option>
+            <option value="10">Bebidas premium (+$10 por persona)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <div class="total-line">
+          <div id="baseLine">Precio base por persona: $0 USD</div>
+          <div id="extrasLine">Extras por persona: $0 USD</div>
+          <div id="discountLine">Descuento: $0 USD</div>
+          <div class="total" id="totalLine">Total: $0 USD</div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-outline" id="cancelReserva">Cancelar</button>
+          <button class="btn btn-primary" id="submitReserva">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       Modal de detalles
+       ========================= -->
+  <div class="details-backdrop" id="detailsBackdrop" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+    <div class="details-modal">
+      <div class="details-head">
+        <strong id="detailsTitle" style="color: var(--text);">Detalles del servicio</strong>
+        <button class="btn btn-outline" id="closeDetails" aria-label="Cerrar">Cerrar</button>
+      </div>
+      <div class="details-body" id="detailsBody">
+        <!-- Contenido generado por JS -->
+      </div>
+      <div class="details-foot">
+        <button class="btn btn-primary" id="detailsReservar">Reservar este servicio</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       JavaScript
+       ========================= -->
+  <script>
+    // Datos base con imágenes solicitadas y detalles
+    const tours = [
+      {
+        id: "punta-cana-tours",
+        titulo: "Punta Cana Tours",
+        descripcion: "Playas, snorkel y relax. Ideal para primera visita.",
+        duracion: "4–6 horas",
+        precio: 79,
+        img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg2gnam7yeuxUTrYNGtTWj5EAuP-Z0c2YCRdE196p-DXsUVOHD4YQywT1TuxJ4gKuYf2rX5t7aD0S6YlpAp4_brHmx4UlQv3y2gcppfFFEFQBo74c68ptDOkdr0xl3UYW1epNwejVOMX-fhVPXI4rTJTjvGXAkAWDKiMz3v2uXyUdQGYx4pDzaYR1dy6m4I/w400-h266/WhatsApp%20Image%202025-02-18%20at%2011.57.11%20AM.jpeg",
+        etiqueta: "Popular",
+        detalles: {
+          incluye: ["Guía certificado", "Equipo de snorkel", "Agua y snacks", "Seguro básico"],
+          noIncluye: ["Almuerzo", "Fotos profesionales"],
+          recomendaciones: ["Bloqueador solar", "Gorra", "Toalla"],
+          puntoEncuentro: "Lobby del hotel en Bávaro/Punta Cana",
+          horario: "Salidas 9:00 y 14:00",
+        }
+      },
+      {
+        id: "punta-cana-ship",
+        titulo: "Punta Cana Ship",
+        descripcion: "Navega el Caribe en barco con música y bebidas.",
+        duracion: "3–4 horas",
+        precio: 95,
+        img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgnickRw9plF9tb8s1QdvA8VsQTpNin2_H29QPzHZtsuqSaylKKGTmTz2uOoXSr147y06dn5FHSHGmmulYZJjmpJWcPDWCRkYHFsUCSg3SIy-4bavsioJfwiTD3RSfcgIjetenQ2eYzxGT24zsCLxWHfu0QH4-De7C3KvJ7TAm87WD4NGPMZXYGV6exoIWr/w400-h400/WhatsApp%20Image%202025-02-18%20at%2011.57.10%20AM.jpeg",
+        etiqueta: "Mar",
+        detalles: {
+          incluye: ["Bar abierto estándar", "Música a bordo", "Parada para snorkel"],
+          noIncluye: ["Bebidas premium (extra)", "Transporte (extra)"],
+          recomendaciones: ["Traje de baño", "Lentes de sol"],
+          puntoEncuentro: "Marina en Punta Cana",
+          horario: "Salidas 10:00 y 15:00",
+        }
+      },
+      {
+        id: "buggies",
+        titulo: "Buggies Adventure",
+        descripcion: "Adrenalina por senderos y paisajes únicos.",
+        duracion: "2–3 horas",
+        precio: 65,
+        img: "https://www.dominicantours.com.do/gallery/Macaobuggies_ba5ypaov.com13.jpg",
+        etiqueta: "Aventura",
+        detalles: {
+          incluye: ["Casco y gafas", "Guía de ruta", "Paradas fotográficas"],
+          noIncluye: ["Ropa de recambio", "Lavado de equipo"],
+          recomendaciones: ["Ropa que se pueda ensuciar", "Zapatillas cerradas"],
+          puntoEncuentro: "Base de buggies en Macao",
+          horario: "Salidas 9:00, 12:00 y 15:00",
+        }
+      }
+    ];
+
+    const excursiones = [
+      {
+        id: "isla-saona",
+        titulo: "Isla Saona",
+        descripcion: "Piscinas naturales y arena blanca—un clásico.",
+        duracion: "Día completo",
+        precio: 110,
+        img: "https://www.viajesyfotografia.com/wp-content/uploads/2019/07/isla-saona-3s132_result.jpg",
+        etiqueta: "Imperdible",
+        detalles: {
+          incluye: ["Catamarán/lancha", "Almuerzo buffet", "Guía"],
+          noIncluye: ["Bebidas premium (extra)"],
+          recomendaciones: ["Protector solar", "Sombrero", "Efectivo para souvenirs"],
+          puntoEncuentro: "Hotel o punto de recogida",
+          horario: "Salida 7:00–8:00, regreso 18:00",
+        }
+      },
+      {
+        id: "santo-domingo-city",
+        titulo: "City Tour Santo Domingo",
+        descripcion: "Historia, cultura y gastronomía local.",
+        duracion: "5–6 horas",
+        precio: 75,
+        img: "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/07/90/dd/b8.jpg",
+        etiqueta: "Cultura",
+        detalles: {
+          incluye: ["Transporte", "Guía histórico", "Entradas a museos"],
+          noIncluye: ["Almuerzo"],
+          recomendaciones: ["Zapatos cómodos", "Agua"],
+          puntoEncuentro: "Zona Colonial",
+          horario: "Salidas 9:00 y 13:00",
+        }
+      },
+      {
+        id: "cuevas-hoyo",
+        titulo: "Cuevas & Hoyo Azul",
+        descripcion: "Senderismo suave y baño en aguas cristalinas.",
+        duracion: "4–5 horas",
+        precio: 89,
+        img: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/bf/cc/02/breathtaking.jpg?w=1200&h=-1&s=1",
+        etiqueta: "Naturaleza",
+        detalles: {
+          incluye: ["Acceso al cenote", "Guía de naturaleza", "Equipo básico"],
+          noIncluye: ["Toalla"],
+          recomendaciones: ["Traje de baño", "Calzado antideslizante"],
+          puntoEncuentro: "Parque ecológico",
+          horario: "Salidas 10:00 y 14:00",
+        }
+      }
+    ];
+
+    const allProducts = [...tours, ...excursiones];
+
+    // Render cards
+    function renderCards(list, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = list.map(item => `
+        <article class="card" aria-label="${item.titulo}">
+          <div class="card-media">
+            <img src="${item.img}" alt="${item.titulo}" loading="lazy" />
+          </div>
+          <div class="card-body">
+            <div class="card-title">${item.titulo}</div>
+            <div class="card-meta">
+              <span class="chip">${item.duracion}</span>
+              <span class="chip">${item.etiqueta}</span>
+              <span class="price">$${item.precio} USD</span>
+            </div>
+            <p style="color:var(--text-soft); margin:0 0 10px;">${item.descripcion}</p>
+            <div class="card-actions">
+              <button class="btn btn-primary" data-id="${item.id}" data-title="${item.titulo}" data-price="${item.precio}">
+                Reservar
+              </button>
+              <button class="btn btn-outline" data-info="${item.id}">Saber más</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    renderCards(tours, "toursGrid");
+    renderCards(excursiones, "excursionesGrid");
+
+    // Tema claro/oscuro
+    const root = document.documentElement;
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+
+    function setTheme(theme) {
+      root.setAttribute("data-theme", theme);
+      themeIcon.textContent = theme === "light" ? "☀️" : "🌙";
+      localStorage.setItem("theme", theme);
+    }
+    const savedTheme = localStorage.getItem("theme");
+    setTheme(savedTheme || "light");
+
+    themeToggle.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme") || "light";
+      setTheme(current === "dark" ? "light" : "dark");
+    });
+
+    // Menú móvil
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobileMenu");
+    hamburger.addEventListener("click", () => {
+      const visible = mobileMenu.style.display === "flex";
+      mobileMenu.style.display = visible ? "none" : "flex";
+    });
+
+    // Scroll suave y cierre del menú móvil al navegar
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener("click", (e) => {
+        const id = a.getAttribute("href").substring(1);
+        const el = document.getElementById(id);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          mobileMenu.style.display = "none";
+        }
+      });
+    });
+
+    // Modal reserva
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const closeModalBtn = document.getElementById("closeModal");
+    const cancelReservaBtn = document.getElementById("cancelReserva");
+    const submitReservaBtn = document.getElementById("submitReserva");
+    const productChip = document.getElementById("modalProductChip");
+    const baseLine = document.getElementById("baseLine");
+    const extrasLine = document.getElementById("extrasLine");
+    const discountLine = document.getElementById("discountLine");
+    const totalLine = document.getElementById("totalLine");
+    const personasSel = document.getElementById("personas");
+    const extrasSel = document.getElementById("extras");
+    const servicioSel = document.getElementById("servicio");
+
+    let currentProduct = { id: "", titulo: "Reserva general", precio: 0 };
+
+    // Poblar selector de servicio en modal y en reserva inline
+    function populateServiceSelect(selectEl) {
+      selectEl.innerHTML = `<option value="">Selecciona un servicio</option>` + allProducts
+        .map(p => `<option value="${p.id}">${p.titulo} — $${p.precio} USD</option>`).join("");
+    }
+    populateServiceSelect(servicioSel);
+
+    // Bloque reserva inline
+    const inlineServicio = document.getElementById("inlineServicio");
+    const inlinePersonas = document.getElementById("inlinePersonas");
+    const inlineExtras = document.getElementById("inlineExtras");
+    const inlineTotal = document.getElementById("inlineTotal");
+    const inlineReservar = document.getElementById("inlineReservar");
+    populateServiceSelect(inlineServicio);
+
+    function calcTotal(base, personas, extrasPerPerson) {
+      const subtotalBase = base * personas;
+      const subtotalExtras = extrasPerPerson * personas;
+      let discountRate = 0;
+      if (personas >= 3 && personas <= 4) discountRate = 0.05;
+      if (personas >= 5) discountRate = 0.10;
+      const discount = (subtotalBase + subtotalExtras) * discountRate;
+      const total = (subtotalBase + subtotalExtras) - discount;
+      return { subtotalBase, subtotalExtras, discount, total };
+    }
+
+    function updateInlineTotal() {
+      const id = inlineServicio.value;
+      const personas = Number(inlinePersonas.value);
+      const extrasPerPerson = Number(inlineExtras.value);
+      const product = allProducts.find(p => p.id === id);
+      const base = product ? product.precio : 0;
+      const { total } = calcTotal(base, personas, extrasPerPerson);
+      inlineTotal.textContent = `$${total.toFixed(2)} USD`;
+    }
+    inlineServicio.addEventListener("change", updateInlineTotal);
+    inlinePersonas.addEventListener("change", updateInlineTotal);
+    inlineExtras.addEventListener("change", updateInlineTotal);
+    updateInlineTotal();
+
+    inlineReservar.addEventListener("click", () => {
+      const id = inlineServicio.value;
+      const product = allProducts.find(p => p.id === id);
+      openModal(product || null);
+    });
+
+    function openModal(product = null) {
+      modalBackdrop.style.display = "flex";
+      document.body.style.overflow = "hidden";
+      populateServiceSelect(servicioSel);
+
+      if (product) {
+        currentProduct = product;
+        productChip.textContent = product.titulo;
+        servicioSel.value = product.id;
+      } else {
+        currentProduct = { id: "", titulo: "Reserva general", precio: 0 };
+        productChip.textContent = "Reserva general";
+        servicioSel.value = "";
+      }
+      personasSel.value = "2";
+      extrasSel.value = "0";
+      updatePrice();
+    }
+    function closeModal() {
+      modalBackdrop.style.display = "none";
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("ctaReserva").addEventListener("click", () => openModal());
+    document.getElementById("heroReserva").addEventListener("click", () => openModal());
+    document.getElementById("openReserva").addEventListener("click", () => openModal());
+
+    // Delegación para botones "Reservar" en cards
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".btn.btn-primary");
+      if (btn && btn.dataset.id) {
+        const id = btn.dataset.id;
+        const product = allProducts.find(x => x.id === id);
+        openModal(product);
+      }
+    });
+
+    // Cerrar modal
+    closeModalBtn.addEventListener("click", closeModal);
+    cancelReservaBtn.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === modalBackdrop) closeModal();
+    });
+
+    // Cambio de servicio dentro del modal
+    servicioSel.addEventListener("change", () => {
+      const id = servicioSel.value;
+      const product = allProducts.find(p => p.id === id);
+      if (product) {
+        currentProduct = product;
+        productChip.textContent = product.titulo;
+      } else {
+        currentProduct = { id: "", titulo: "Reserva general", precio: 0 };
+        productChip.textContent = "Reserva general";
+      }
+      updatePrice();
+    });
+
+    // Precio dinámico en modal
+    function updatePrice() {
+      const base = Number(currentProduct.precio || 0);
+      const personas = Number(personasSel.value);
+      const extrasPerPerson = Number(extrasSel.value);
+
+      const { subtotalBase, subtotalExtras, discount, total } = calcTotal(base, personas, extrasPerPerson);
+
+      baseLine.textContent = `Precio base por persona: $${base.toFixed(2)} USD`;
+      extrasLine.textContent = `Extras por persona: $${extrasPerPerson.toFixed(2)} USD`;
+      discountLine.textContent = `Descuento: $${discount.toFixed(2)} USD`;
+      totalLine.textContent = `Total: $${total.toFixed(2)} USD`;
+    }
+
+    personasSel.addEventListener("change", updatePrice);
+    extrasSel.addEventListener("change", updatePrice);
+
+    // Enviar reserva (simulado)
+    submitReservaBtn.addEventListener("click", () => {
+      const nombre = document.getElementById("nombre").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const fecha = document.getElementById("fecha").value;
+      const personas = Number(personasSel.value);
+      const extrasPerPerson = Number(extrasSel.value);
+
+      if (!nombre || !email || !fecha) {
+        alert("Por favor completa nombre, email y fecha.");
+        return;
+      }
+
+      const base = Number(currentProduct.precio || 0);
+      const { subtotalBase, subtotalExtras, discount, total } = calcTotal(base, personas, extrasPerPerson);
+
+      const payload = {
+        producto: currentProduct.titulo,
+        precioBase: base,
+        personas,
+        extrasPorPersona: extrasPerPerson,
+        subtotalBase,
+        subtotalExtras,
+        descuento: discount,
+        total,
+        nombre, email, telefono, fecha,
+        ts: Date.now()
+      };
+      console.log("Reserva enviada:", payload);
+
+      closeModal();
+      const toast = document.createElement("div");
+      toast.textContent = `Reserva enviada. Total: $${total.toFixed(2)} USD. Te contactaremos por email.`;
+      toast.style.position = "fixed";
+      toast.style.bottom = "20px";
+      toast.style.left = "50%";
+      toast.style.transform = "translateX(-50%)";
+      toast.style.padding = "10px 14px";
+      toast.style.borderRadius = "10px";
+      toast.style.border = "1px solid var(--border)";
+      toast.style.background = "var(--surface-strong)";
+      toast.style.color = "var(--text)";
+      toast.style.boxShadow = "var(--shadow)";
+      toast.style.zIndex = "200";
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3200);
+    });
+
+    // WhatsApp
+    document.getElementById("whatsappBtn").addEventListener("click", () => {
+      const msg = encodeURIComponent("Hola, quiero reservar una experiencia en Dominican Excursion.");
+      window.open(`https://wa.me/18090000000?text=${msg}`, "_blank");
+    });
+
+    // Persistir campos básicos
+    ["nombre","email","telefono"].forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener("input", () => localStorage.setItem("form_"+id, el.value));
+      const saved = localStorage.getItem("form_"+id);
+      if (saved) el.value = saved;
+    });
+
+    // Atajo de teclado T para tema
+    document.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "t") themeToggle.click();
+    });
+
+    // =========================
+    // Modal de detalles
+    // =========================
+    const detailsBackdrop = document.getElementById("detailsBackdrop");
+    const closeDetailsBtn = document.getElementById("closeDetails");
+    const detailsBody = document.getElementById("detailsBody");
+    const detailsTitle = document.getElementById("detailsTitle");
+    const detailsReservarBtn = document.getElementById("detailsReservar");
+
+    let detailsProduct = null;
+
+    function openDetails(product) {
+      detailsProduct = product;
+      detailsTitle.textContent = product.titulo;
+      detailsBody.innerHTML = `
+        <div>
+          <div style="border-radius: 12px; overflow:hidden; border:1px solid var(--border); box-shadow: var(--shadow);">
+            <img src="${product.img}" alt="${product.titulo}" />
+          </div>
+          <div style="margin-top:12px;">
+            <span class="chip">${product.duracion}</span>
+            <span class="chip">${product.etiqueta}</span>
+            <span class="price">$${product.precio} USD</span>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin:0 0 8px; color: var(--text);">Descripción</h3>
+          <p style="color: var(--text-soft);">${product.descripcion}</p>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+            <div>
+              <h4 style="margin:0 0 6px; color: var(--text);">Incluye</h4>
+              <ul style="margin:0; padding-left: 18px; color: var(--text-soft);">
+                ${product.detalles.incluye.map(i => `<li>${i}</li>`).join("")}
+              </ul>
+            </div>
+            <div>
+              <h4 style="margin:0 0 6px; color: var(--text);">No incluye</h4>
+              <ul style="margin:0; padding-left: 18px; color: var(--text-soft);">
+                ${product.detalles.noIncluye.map(i => `<li>${i}</li>`).join("")}
+              </ul>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+            <div>
+              <h4 style="margin:0 0 6px; color: var(--text);">Recomendaciones</h4>
+              <ul style="margin:0; padding-left: 18px; color: var(--text-soft);">
+                ${product.detalles.recomendaciones.map(i => `<li>${i}</li>`).join("")}
+              </ul>
+            </div>
+            <div>
+              <h4 style="margin:0 0 6px; color: var(--text);">Logística</h4>
+              <p style="margin:0; color: var(--text-soft);"><strong>Punto de encuentro:</strong> ${product.detalles.puntoEncuentro}</p>
+              <p style="margin:0; color: var(--text-soft);"><strong>Horario:</strong> ${product.detalles.horario}</p>
+            </div>
+          </div>
+        </div>
+      `;
+      detailsBackdrop.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeDetails() {
+      detailsBackdrop.style.display = "none";
+      document.body.style.overflow = "";
+      detailsProduct = null;
+    }
+
+    closeDetailsBtn.addEventListener("click", closeDetails);
+    detailsBackdrop.addEventListener("click", (e) => {
+      if (e.target === detailsBackdrop) closeDetails();
+    });
+
+    // Delegación para "Saber más"
+    document.addEventListener("click", (e) => {
+      const infoBtn = e.target.closest(".btn.btn-outline");
+      if (infoBtn && infoBtn.dataset.info) {
+        const id = infoBtn.dataset.info;
+        const product = allProducts.find(x => x.id === id);
+        if (product) openDetails(product);
+      }
+    });
+
+    // Reservar desde detalles
+    detailsReservarBtn.addEventListener("click", () => {
+      if (detailsProduct) {
+        closeDetails();
+        openModal(detailsProduct);
+      }
+    });
+  </script>
+</body>
+</html>
